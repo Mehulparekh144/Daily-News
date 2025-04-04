@@ -38,18 +38,14 @@ const model = genAi.getGenerativeModel({
 const config = {
   frequency: 1, // Once in a day,
   newsCount: 10,
-  sources: [
-    { name: 'Dev.to', url: 'https://dev.to/feed/' },
-    {
-      name: "Github", url: "https://github.blog/developer-skills/feed"
-    }
-  ]
+  source: "https://dev.to/feed/"
+
 }
 
 const fetchNews = async () => {
   console.log("Fetching news...")
   const parser = new Parser()
-  const feed = await parser.parseURL(config.sources[1].url)
+  const feed = await parser.parseURL(config.source)
   const news = feed.items.slice(0, config.newsCount).map(item => ({
     title: item.title,
     link: item.link,
@@ -73,13 +69,24 @@ const summarizeNews = async (news) => {
 
   // Create a single broadcast from all combined content
   const broadcastPrompt = `
-  Create a 5-minute tech news podcast broadcast that summarizes these tech news stories. Write it as if you're a news anchor delivering the daily tech news roundup. Make it flow naturally and maintain a professional yet engaging tone. Include a brief introduction and conclusion to make it feel like a complete news segment. Keep the language clear and engaging, suitable for text-to-speech conversion. Write in plain text without any special characters, line breaks, or formatting. Use simple punctuation and natural pauses. Make it sound conversational and easy to read aloud.
+  Create a concise 2-minute tech news podcast broadcast that effectively summarizes these tech news stories. Write it as if you're a news anchor delivering a focused daily tech news roundup. Structure the content to fill approximately 2 minutes of speaking time (about 300-350 words). Make it flow naturally and maintain a professional yet engaging tone. Include:
+
+  1. A 15-second introduction welcoming listeners and setting the context for today's tech news
+  2. Brief coverage of each story (about 20-25 seconds per story), including:
+     - Main point and key development
+     - Quick technical explanation
+     - Brief impact note
+  3. Quick transitions between stories
+  4. A 15-second conclusion highlighting key takeaways
+
+  Keep the language clear and engaging, suitable for text-to-speech conversion. Write in plain text without any special characters, line breaks, or formatting. Use simple punctuation and natural pauses. Make it sound conversational and easy to read aloud. Focus on the most important aspects of each story while maintaining listener engagement.
 
   News Stories:
   ${combinedContent}
 
-  Important: Respond with plain text only. No line breaks, no special characters, no formatting. Write it as a single flowing paragraph that can be read naturally in about 2 minutes. Use simple punctuation and natural pauses to create flow. Make it sound like natural speech.
+  Important: Respond with plain text only. No line breaks, no special characters, no formatting. Write it as a single flowing paragraph that can be read naturally in about 2 minutes. Use simple punctuation and natural pauses to create flow. Make it sound like natural speech. Ensure the content is concise yet informative, fitting within the 2-minute duration while keeping listeners engaged.
   `
+
 
   const result = await model.generateContent(broadcastPrompt)
   if (!result.response) {
@@ -172,3 +179,4 @@ export const generatePodcast = async () => {
     throw error
   }
 }
+
