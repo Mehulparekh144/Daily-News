@@ -73,7 +73,7 @@ const summarizeNews = async (news) => {
 
   // Create a single broadcast from all combined content
   const broadcastPrompt = `
-  Create a 2-minute tech news podcast broadcast that summarizes these tech news stories. Write it as if you're a news anchor delivering the daily tech news roundup. Make it flow naturally and maintain a professional yet engaging tone. Include a brief introduction and conclusion to make it feel like a complete news segment. Keep the language clear and engaging, suitable for text-to-speech conversion. Write in plain text without any special characters, line breaks, or formatting. Use simple punctuation and natural pauses. Make it sound conversational and easy to read aloud.
+  Create a 5-minute tech news podcast broadcast that summarizes these tech news stories. Write it as if you're a news anchor delivering the daily tech news roundup. Make it flow naturally and maintain a professional yet engaging tone. Include a brief introduction and conclusion to make it feel like a complete news segment. Keep the language clear and engaging, suitable for text-to-speech conversion. Write in plain text without any special characters, line breaks, or formatting. Use simple punctuation and natural pauses. Make it sound conversational and easy to read aloud.
 
   News Stories:
   ${combinedContent}
